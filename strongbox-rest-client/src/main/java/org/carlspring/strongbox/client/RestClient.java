@@ -343,11 +343,11 @@ public class RestClient extends ArtifactClient
      */
     public int deleteRepository(String storageId,
                                 String repositoryId,
-                                boolean force)
+                                boolean deleteContents)
     {
         String url = getContextBaseUrl() +
                      "/configuration/strongbox/storages/" + storageId + "/" + repositoryId +
-                     (force ? "?force=true" : "");
+                     (deleteContents ? "?deleteContents=true" : "");
 
         WebTarget resource = getClientInstance().target(url);
         setupAuthentication(resource);

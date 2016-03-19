@@ -1,6 +1,7 @@
 package org.carlspring.strongbox.services.impl;
 
 import org.carlspring.strongbox.configuration.ConfigurationManager;
+import org.carlspring.strongbox.services.ConfigurationManagementService;
 import org.carlspring.strongbox.services.RepositoryManagementService;
 import org.carlspring.strongbox.services.StorageManagementService;
 import org.carlspring.strongbox.storage.Storage;
@@ -15,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.xml.bind.JAXBException;
+
 /**
  * @author mtodorov
  */
@@ -26,6 +29,9 @@ public class StorageManagementServiceImpl implements StorageManagementService
 
     @Autowired
     private ConfigurationManager configurationManager;
+
+    @Autowired
+    private ConfigurationManagementService configurationManagementService;
 
     @Autowired
     private RepositoryManagementService repositoryManagementService;
@@ -45,17 +51,18 @@ public class StorageManagementServiceImpl implements StorageManagementService
     }
 
     @Override
-    public void removeStorage(String storageId)
-            throws IOException
+    public void removeStorage(String storageId, boolean deleteRepositoryContents)
+            throws IOException, JAXBException
     {
         final Storage storage = configurationManager.getConfiguration().getStorage(storageId);
         for (Repository repository : storage.getRepositories().values())
         {
-            repositoryManagementService.removeRepository(storageId, repository.getId());
+            repositoryManagementService.removeRepository(storageId, repository.getId(), deleteRepositoryContents);
         }
 
         FileUtils.deleteDirectory(new File(storage.getBasedir()));
+
+        configurationManagementService.removeStorage(storageId);
     }
 
 }
-

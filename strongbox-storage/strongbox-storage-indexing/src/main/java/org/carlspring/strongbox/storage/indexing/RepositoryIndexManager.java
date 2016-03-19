@@ -47,10 +47,16 @@ public class RepositoryIndexManager
         }
     }
 
-    public void closeIndexer(String storageAndRepository)
+    public void closeIndexer(String storageId, String repositoryId)
             throws IOException
     {
-        final RepositoryIndexer repositoryIndexer = indexes.get(storageAndRepository);
+        closeIndexer(storageId + ":" + repositoryId);
+    }
+
+    public void closeIndexer(String storageIdAndRepositoryId)
+            throws IOException
+    {
+        final RepositoryIndexer repositoryIndexer = indexes.get(storageIdAndRepositoryId);
 
         logger.debug("Closing indexer for " + repositoryIndexer.getStorageId() + ":" + repositoryIndexer.getRepositoryId() + "...");
 
@@ -58,7 +64,7 @@ public class RepositoryIndexManager
 
         logger.debug("Closed indexer for " + repositoryIndexer.getStorageId() + ":" + repositoryIndexer.getRepositoryId() + ".");
 
-        indexes.remove(storageAndRepository);
+        indexes.remove(storageIdAndRepositoryId);
     }
 
     public Map<String, RepositoryIndexer> getIndexes()
@@ -71,19 +77,19 @@ public class RepositoryIndexManager
         this.indexes = indexes;
     }
 
-    public RepositoryIndexer getRepositoryIndex(String storageAndRepositoryId)
+    public RepositoryIndexer getRepositoryIndex(String storageId, String repositoryId)
     {
-        return indexes.get(storageAndRepositoryId);
+        return indexes.get(storageId + ":" + repositoryId);
     }
 
-    public RepositoryIndexer addRepositoryIndex(String repositoryId, RepositoryIndexer value)
+    public RepositoryIndexer addRepositoryIndex(String storageId, String repositoryId, RepositoryIndexer value)
     {
-        return indexes.put(repositoryId, value);
+        return indexes.put(storageId + ":" + repositoryId, value);
     }
 
-    public RepositoryIndexer removeRepositoryIndex(String repositoryId)
+    public RepositoryIndexer removeRepositoryIndex(String storageId, String repositoryId)
     {
-        return indexes.remove(repositoryId);
+        return indexes.remove(storageId + ":" + repositoryId);
     }
 
 }

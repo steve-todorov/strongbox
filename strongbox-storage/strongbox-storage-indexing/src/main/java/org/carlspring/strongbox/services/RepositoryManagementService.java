@@ -21,7 +21,8 @@ public interface RepositoryManagementService
             throws ArtifactStorageException;
 
     void removeRepository(String storageId,
-                          String repositoryId)
+                          String repositoryId,
+                          boolean deleteContents)
             throws IOException;
 
 }

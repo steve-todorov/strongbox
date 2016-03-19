@@ -190,7 +190,7 @@ public class StorageBooter
                                                                                                repositoryBasedir,
                                                                                                indexDir);
 
-        repositoryIndexManager.addRepositoryIndex(storage + ":" + repositoryId, repositoryIndexer);
+        repositoryIndexManager.addRepositoryIndex(storage.getId(), repositoryId, repositoryIndexer);
     }
 
     public RepositoryManagementService getRepositoryManagementService()

@@ -62,7 +62,7 @@ public class RepositoryManagementServiceImplTest
 
         assertTrue("Failed to create the repository \"" + repositoryDir.getAbsolutePath() + "\"!", repositoryDir.exists());
 
-        repositoryManagementService.removeRepository("storage0", "foo-snapshots");
+        repositoryManagementService.removeRepository("storage0", "foo-snapshots", true);
 
         assertFalse("Failed to remove the repository!", repositoryDir.exists());
     }
@@ -75,7 +75,7 @@ public class RepositoryManagementServiceImplTest
 
         generateArtifact(REPOSITORY_BASEDIR.getAbsolutePath(), gavtc, new String[] {"6.0.1", "6.1.1", "6.2.1", "6.2.2-SNAPSHOT", "7.0", "7.1"});
 
-        final RepositoryIndexer repositoryIndexer = repositoryIndexManager.getRepositoryIndex("storage0:releases");
+        final RepositoryIndexer repositoryIndexer = repositoryIndexManager.getRepositoryIndex("storage0", "releases");
         final int x = repositoryIndexer.index(new File("org/carlspring/strongbox/strongbox-utils"));
 
         SearchRequest request = new SearchRequest("storage0",

@@ -61,7 +61,7 @@ public class ArtifactSearchServiceImplTest
     @Test
     public void testContains() throws Exception
     {
-        final RepositoryIndexer repositoryIndexer = repositoryIndexManager.getRepositoryIndex("storage0:releases");
+        final RepositoryIndexer repositoryIndexer = repositoryIndexManager.getRepositoryIndex("storage0", "releases");
 
         final int x = repositoryIndexer.index(new File("org/carlspring/strongbox/strongbox-utils"));
 

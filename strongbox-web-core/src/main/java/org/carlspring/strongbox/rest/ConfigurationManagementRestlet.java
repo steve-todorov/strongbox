@@ -257,19 +257,14 @@ public class ConfigurationManagementRestlet
     @DELETE
     @Path("/storages/{storageId}")
     public Response removeStorage(@PathParam("storageId") final String storageId,
-                                  @QueryParam("force") @DefaultValue("false") final boolean force)
+                                  @QueryParam("deleteRepositoryContents") @DefaultValue("false") final boolean deleteRepositoryContents)
             throws IOException, JAXBException
     {
         if (configurationManagementService.getStorage(storageId) != null)
         {
             try
             {
-                if (force)
-                {
-                    storageManagementService.removeStorage(storageId);
-                }
-
-                configurationManagementService.removeStorage(storageId);
+                storageManagementService.removeStorage(storageId, deleteRepositoryContents);
 
                 logger.debug("Removed storage " + storageId + ".");
 
@@ -346,7 +341,7 @@ public class ConfigurationManagementRestlet
     @Path("/storages/{storageId}/{repositoryId}")
     public Response removeRepository(@PathParam("storageId") final String storageId,
                                      @PathParam("repositoryId") final String repositoryId,
-                                     @QueryParam("force") @DefaultValue("false") boolean force)
+                                     @QueryParam("deleteContents") @DefaultValue("false") boolean deleteContents)
             throws IOException
     {
         final Repository repository = configurationManagementService.getStorage(storageId).getRepository(repositoryId);
@@ -354,17 +349,13 @@ public class ConfigurationManagementRestlet
         {
             try
             {
-                repositoryIndexManager.closeIndexer(storageId + ":" + repositoryId);
-
                 final File repositoryBaseDir = new File(repository.getBasedir());
-                if (!repositoryBaseDir.exists() && force)
+                /*
+                if (!repositoryBaseDir.exists() && deleteContents)
                 {
-                    repositoryManagementService.removeRepository(storageId, repository.getId());
-                }
-
-                configurationManagementService.getStorage(storageId).removeRepository(repositoryId);
-
-                logger.debug("Removed repository " + storageId + ":" + repositoryId + ".");
+                */
+                    repositoryManagementService.removeRepository(storageId, repository.getId(), deleteContents);
+//                }
 
                 return Response.ok().build();
             }

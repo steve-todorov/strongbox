@@ -143,8 +143,8 @@ public class ConfigurationManagementRestletTest
             throws IOException, JAXBException
     {
         final String storageId = "storage2";
-        final String repositoryId1 = "repository0";
-        final String repositoryId2 = "repository1";
+        final String repositoryId0 = "repository0";
+        final String repositoryId1 = "repository1";
 
         Storage storage2 = new Storage(storageId);
 
@@ -152,13 +152,13 @@ public class ConfigurationManagementRestletTest
 
         assertEquals("Failed to create storage!", 200, response);
 
-        Repository r1 = new Repository(repositoryId1);
+        Repository r1 = new Repository(repositoryId0);
         r1.setAllowsRedeployment(true);
         r1.setSecured(true);
         r1.setStorage(storage2);
         r1.setProxyConfiguration(createProxyConfiguration());
 
-        Repository r2 = new Repository(repositoryId2);
+        Repository r2 = new Repository(repositoryId1);
         r2.setAllowsRedeployment(true);
         r2.setSecured(true);
         r2.setStorage(storage2);
@@ -166,7 +166,7 @@ public class ConfigurationManagementRestletTest
         client.addRepository(r1);
         client.addRepository(r2);
 
-        final ProxyConfiguration pc = client.getProxyConfiguration(storageId, repositoryId1);
+        final ProxyConfiguration pc = client.getProxyConfiguration(storageId, repositoryId0);
 
         assertNotNull("Failed to get proxy configuration!", pc);
         assertEquals("Failed to get proxy configuration!", pc.getHost(), pc.getHost());
@@ -180,11 +180,11 @@ public class ConfigurationManagementRestletTest
         assertNotNull("Failed to get storage (" + storageId + ")!", storage);
         assertFalse("Failed to get storage (" + storageId + ")!", storage.getRepositories().isEmpty());
 
-        response = client.deleteRepository(storageId, repositoryId1, true);
+        response = client.deleteRepository(storageId, repositoryId0, true);
 
-        assertEquals("Failed to delete repository " + storageId + ":" + repositoryId1 + "!", 200, response);
+        assertEquals("Failed to delete repository " + storageId + ":" + repositoryId0 + "!", 200, response);
 
-        final Repository r = client.getRepository(storageId, repositoryId1);
+        final Repository r = client.getRepository(storageId, repositoryId0);
 
         assertNull(r);
 

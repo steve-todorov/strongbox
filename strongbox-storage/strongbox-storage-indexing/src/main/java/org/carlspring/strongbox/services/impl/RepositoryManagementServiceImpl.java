@@ -1,5 +1,6 @@
 package org.carlspring.strongbox.services.impl;
 
+import org.carlspring.strongbox.services.ConfigurationManagementService;
 import org.carlspring.strongbox.services.RepositoryManagementService;
 import org.carlspring.strongbox.storage.Storage;
 import org.carlspring.strongbox.storage.indexing.RepositoryIndexManager;
@@ -28,6 +29,9 @@ public class RepositoryManagementServiceImpl extends BasicRepositoryServiceImpl
     private static final Logger logger = LoggerFactory.getLogger(RepositoryManagementServiceImpl.class);
 
     @Autowired
+    private ConfigurationManagementService configurationManagementService;
+
+    @Autowired
     private RepositoryIndexManager repositoryIndexManager;
 
     @Autowired
@@ -53,7 +57,7 @@ public class RepositoryManagementServiceImpl extends BasicRepositoryServiceImpl
                                                                                                repositoryBasedir,
                                                                                                indexDir);
 
-        repositoryIndexManager.addRepositoryIndex(storageId + ":" + repositoryId, repositoryIndexer);
+        repositoryIndexManager.addRepositoryIndex(storageId, repositoryId, repositoryIndexer);
     }
 
     private void createRepositoryStructure(String storageBasedirPath,
@@ -83,14 +87,15 @@ public class RepositoryManagementServiceImpl extends BasicRepositoryServiceImpl
     {
         try
         {
-            final RepositoryIndexer sourceIndex = repositoryIndexManager.getRepositoryIndex(sourceStorage + ":" +
+            final RepositoryIndexer sourceIndex = repositoryIndexManager.getRepositoryIndex(sourceStorage,
                                                                                             sourceRepositoryId);
             if (sourceIndex == null)
             {
                 throw new ArtifactStorageException("Source repository not found!");
             }
 
-            final RepositoryIndexer targetIndex = repositoryIndexManager.getRepositoryIndex(targetStorage + ":" + targetRepositoryId);
+            final RepositoryIndexer targetIndex = repositoryIndexManager.getRepositoryIndex(targetStorage,
+                                                                                            targetRepositoryId);
             if (targetIndex == null)
             {
                 throw new ArtifactStorageException("Target repository not found!");
@@ -106,10 +111,21 @@ public class RepositoryManagementServiceImpl extends BasicRepositoryServiceImpl
 
     @Override
     public void removeRepository(String storageId,
-                                 String repositoryId)
+                                 String repositoryId,
+                                 boolean deleteContents)
             throws IOException
     {
-        removeDirectoryStructure(storageId, repositoryId);
+        repositoryIndexManager.closeIndexer(storageId, repositoryId);
+        repositoryIndexManager.removeRepositoryIndex(storageId, repositoryId);
+
+        if (deleteContents)
+        {
+            removeDirectoryStructure(storageId, repositoryId);
+        }
+
+        configurationManagementService.getStorage(storageId).removeRepository(repositoryId);
+
+        logger.debug("Removed repository " + storageId + ":" + repositoryId + ".");
     }
 
     private void removeDirectoryStructure(String storageId,

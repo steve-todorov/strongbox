@@ -58,7 +58,7 @@ public class RepositoryIndexerTest
     @Test
     public void testIndex() throws Exception
     {
-        final RepositoryIndexer repositoryIndexer = repositoryIndexManager.getRepositoryIndex("storage0:releases");
+        final RepositoryIndexer repositoryIndexer = repositoryIndexManager.getRepositoryIndex("storage0", "releases");
 
         final int x = repositoryIndexer.index(new File("org/carlspring/strongbox/strongbox-commons"));
 
