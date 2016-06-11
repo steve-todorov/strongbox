@@ -1,6 +1,5 @@
 package org.carlspring.strongbox.configuration;
 
-
 import org.carlspring.strongbox.storage.Storage;
 import org.carlspring.strongbox.storage.repository.RemoteRepository;
 import org.carlspring.strongbox.storage.repository.Repository;
@@ -22,18 +21,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("strongboxConfigurationRepository")
-public class ConfigurationRepository {
+@Component("configurationRepository")
+public class ConfigurationRepository
+{
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationRepository.class);
 
     @Autowired
     OObjectDatabaseTx db;
 
-    public ConfigurationRepository() {
+    public ConfigurationRepository()
+    {
     }
 
-    private OObjectDatabaseTx getDatabase(){
+    private OObjectDatabaseTx getDatabase()
+    {
         db.activateOnCurrentThread();
         return db;
     }
@@ -102,14 +104,17 @@ public class ConfigurationRepository {
         try
         {
             OObjectDatabaseTx db = getDatabase();
-            List<Configuration> result = db.query(new OSQLSynchQuery<>("select * from Configuration"));
-            if (result != null && !result.isEmpty()){
+            List<Configuration> result = db.query(new OSQLSynchQuery<>("SELECT * FROM Configuration"));
+            if (result != null && !result.isEmpty())
+            {
                 Configuration configuration = result.get(result.size() - 1);
                 logger.debug("Loaded configuration " + configuration);
+
                 return db.detachAll(configuration, true);
             }
         }
-        catch (Exception e){
+        catch (Exception e)
+        {
             logger.error("Unable to get configuration.", e);
             return null;
         }
@@ -124,11 +129,10 @@ public class ConfigurationRepository {
             OObjectDatabaseTx db = getDatabase();
             db.save(configuration);
         }
-        catch (Exception e){
+        catch (Exception e)
+        {
             logger.error("Unable to update configuration.", e);
         }
     }
-
-
 
 }

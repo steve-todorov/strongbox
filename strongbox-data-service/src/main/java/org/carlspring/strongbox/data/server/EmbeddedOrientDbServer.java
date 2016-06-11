@@ -1,7 +1,6 @@
 package org.carlspring.strongbox.data.server;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,6 +34,7 @@ public class EmbeddedOrientDbServer
 
     @Value("${org.carlspring.strongbox.data.orientdb.password}")
     String password;
+
 
     @PostConstruct
     public void init()
@@ -87,6 +87,7 @@ public class EmbeddedOrientDbServer
         user.name = name;
         user.password = password;
         user.resources = resources;
+
         return user;
     }
 
@@ -96,6 +97,7 @@ public class EmbeddedOrientDbServer
         OServerEntryConfiguration property = new OServerEntryConfiguration();
         property.name = name;
         property.value = value;
+
         return property;
     }
 
@@ -111,8 +113,11 @@ public class EmbeddedOrientDbServer
     {
         try
         {
-            server.startup(serverConfiguration);
-            server.activate();
+            if (!server.isActive())
+            {
+                server.startup(serverConfiguration);
+                server.activate();
+            }
         }
         catch (Exception e)
         {
@@ -120,17 +125,14 @@ public class EmbeddedOrientDbServer
         }
     }
 
+    // actually there is no need for manual shutdown
+    // it's executed as a part of build / execution of app server finalisation
+    @SuppressWarnings("unused")
     public void shutDown()
     {
         if (server.isActive())
         {
             server.shutdown();
         }
-    }
-
-    @PreDestroy
-    public void destroy()
-    {
-        shutDown();
     }
 }
