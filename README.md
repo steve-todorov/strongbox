@@ -80,3 +80,4 @@ Instructions on how to build the code, can be found [here](https://github.com/st
 
 # Contributing
 Contributions and contributors are always welcome! For more details, please check [here](https://github.com/strongbox/strongbox/blob/master/CONTRIBUTING.md). We have a helpful community of developers on our [Gitter](https://gitter.im/strongbox/strongbox) channel, please feel free to drop by, if you have questions, issues, or would like to contribute!
+
