@@ -1,7 +1,8 @@
 image: strongboxci/alpine:jdk8-mvn3.6
 
 tasks:
-  - init: mvn install -DskipTests=false && cd strongbox-web-core && mvn spring-boot:run
+  - init: mvn install -DskipTests=false
+    command: cd strongbox-web-core && mvn spring-boot:run
 
 ports:
   - port: 48080
