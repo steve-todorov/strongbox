@@ -1,8 +1,6 @@
 tasks:
-  - init: Configure maven settings.xml
-    command: mkdir -p ~/.m2/ && curl -o ~/.m2/settings.xml https://strongbox.github.io/assets/resources/maven/settings.xml
-  - init: Install JDK8
-    command: sdk i java 8.0.265-open
+  - init: Configure
+    command: mkdir -p ~/.m2/ && curl -o ~/.m2/settings.xml https://strongbox.github.io/assets/resources/maven/settings.xml && sed -i 's/sdkman_auto_answer=.*/sdkman_auto_answer=true/' ~/.sdkman/etc/config && sdk update && sdk install java 8.0.265-open && sdk default java sdk i java 8.0.265-open
   - name: Build Strongbox
     command: mvn install -DskipTests=false
   - name: Start Strongbox
