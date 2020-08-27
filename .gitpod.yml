@@ -3,7 +3,7 @@ image:
 
 tasks:
   - name: Build Strongbox
-    command: mvn install -DskipTests=false
+    init: mvn install -DskipTests
   - name: Start Strongbox
     command: cd strongbox-web-core && mvn spring-boot:run
 
