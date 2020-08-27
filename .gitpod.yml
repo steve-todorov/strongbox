@@ -1,8 +1,8 @@
-image: strongboxci/alpine:jdk8-mvn3.6
-
 tasks:
-  - init: Get settings.xml
+  - init: Configure maven settings.xml
     command: mkdir -p ~/.m2/ && curl -o ~/.m2/settings.xml https://strongbox.github.io/assets/resources/maven/settings.xml
+  - init: Install JDK8
+    command: sdk i java 8.0.265-open
   - name: Build Strongbox
     command: mvn install -DskipTests=false
   - name: Start Strongbox
