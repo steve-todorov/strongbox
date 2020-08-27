@@ -3,10 +3,12 @@ image:
 
 tasks:
   - name: Build and run Strongbox
-    init: mvn install -DskipTests && cd strongbox-web-core && mvn spring-boot:run
+    init: mvn install -DskipTests && mvn -pl ./strongbox-web-core spring-boot:run
 
 ports:
   - port: 48080
     onOpen: open-preview
-  - port: 1000-65535
+  - port: 1000-48000
+    onOpen: ignore
+  - port: 49000-65535
     onOpen: ignore
