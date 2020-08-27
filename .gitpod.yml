@@ -2,10 +2,8 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - name: Build Strongbox
-    init: mvn install -DskipTests
-  - name: Start Strongbox
-    command: cd strongbox-web-core && mvn spring-boot:run
+  - name: Build and run Strongbox
+    init: mvn install -DskipTests && cd strongbox-web-core && mvn spring-boot:run
 
 ports:
   - port: 48080
